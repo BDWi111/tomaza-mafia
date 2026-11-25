@@ -40,6 +40,21 @@ jobs:
       - name: Build
         working-directory: ${{ env.PROJ }}
         run: |
+          mkdir -p "$HOME/.gradle"
+          cat << 'EOF' > "$HOME/.gradle/init.gradle"
+          allprojects {
+              buildscript {
+                  repositories {
+                      google()
+                      mavenCentral()
+                  }
+              }
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          EOF
           printf "android.useAndroidX=true\nandroid.enableJetifier=true\norg.gradle.jvmargs=-Xmx3g\n" > gradle.properties
           chmod +x gradlew
           ./gradlew :app:assembleDebug --stacktrace
