@@ -1,11 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    namespace 'com.tomaza.bcore.pine.xposed'
+    compileSdk 34
+
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdk 21
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -25,24 +26,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly project(':Bcore:pine-core')
 }
-
-/*
-apply plugin: 'com.novoda.bintray-release'
-
-publish {
-    userOrg = rootProject.userOrg
-    repoName = rootProject.repoName
-    groupId = rootProject.groupId
-    artifactId = 'xposed'
-    publishVersion = '0.0.8'
-    desc = 'pine hook xposed compat'
-    licences = rootProject.licences
-    website = rootProject.website
-}
-*/
