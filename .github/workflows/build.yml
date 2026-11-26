@@ -39,12 +39,12 @@ jobs:
         run: |
           printf "android.useAndroidX=true\nandroid.enableJetifier=true\norg.gradle.jvmargs=-Xmx3g\n" > gradle.properties
           chmod +x gradlew
-          find . -name "*.gradle" -exec sed -i '/maven.aliyun.com/d' {} +
           ok=0
-          for i in 1 2 3; do
+          for i in 1 2 3 4 5; do
             if ./gradlew :app:assembleDebug --stacktrace > build.log 2>&1; then ok=1; break; fi
             echo "=== attempt $i failed ==="
-            grep -E "What went wrong|Could not|error:|FAILURE" -A3 build.log | head -n 40
+            grep -E "What went wrong|Could not|error:|FAILURE" -A3 build.log | head -n 30
+            sleep 20
           done
           tail -n 15 build.log
           [ "$ok" = 1 ]
