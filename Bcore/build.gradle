@@ -41,7 +41,6 @@ android {
         abortOnError false
         warningsAsErrors false
         disable "UnusedResources", 'RestrictedApi'
-        check 'NewApi', 'InlinedApi'
     }
 }
 
