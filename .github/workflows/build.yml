@@ -39,7 +39,15 @@ jobs:
         run: |
           printf "android.useAndroidX=true\nandroid.enableJetifier=true\norg.gradle.jvmargs=-Xmx3g\n" > gradle.properties
           chmod +x gradlew
-          ./gradlew :app:assembleDebug --stacktrace 2>&1 | tail -n 80
+          find . -name "*.gradle" -exec sed -i '/maven.aliyun.com/d' {} +
+          ok=0
+          for i in 1 2 3; do
+            if ./gradlew :app:assembleDebug --stacktrace > build.log 2>&1; then ok=1; break; fi
+            echo "=== attempt $i failed ==="
+            grep -E "What went wrong|Could not|error:|FAILURE" -A3 build.log | head -n 40
+          done
+          tail -n 15 build.log
+          [ "$ok" = 1 ]
 
       - uses: actions/upload-artifact@v4
         if: always()
