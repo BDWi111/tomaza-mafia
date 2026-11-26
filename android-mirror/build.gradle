@@ -5,10 +5,7 @@ plugins {
 android {
     namespace 'com.android.mirror'
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion '30.0.3'
-
-    aidlPackageWhiteList "android/app/IServiceConnection.aidl"
-    aidlPackageWhiteList "android/accounts/IAccountManagerResponse.aidl"
+    buildToolsVersion '34.0.0'
 
     defaultConfig {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -21,6 +18,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        aidl true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
