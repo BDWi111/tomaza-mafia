@@ -40,25 +40,28 @@ jobs:
           for f in $(find . -path ./build -prune -o \( -name "*.h" -o -name "*.hpp" \) -path "*pine-core*" -print); do
             grep -q "include <cstddef>" "$f" || sed -i '1i #include <cstddef>\n#include <utility>' "$f"
           done
-          head -n 3 $(find . -name scoped_local_ref.h | head -1)
 
       - name: Build
         working-directory: ${{ env.PROJ }}
         run: |
           printf "android.useAndroidX=true\nandroid.enableJetifier=true\norg.gradle.jvmargs=-Xmx3g\n" > gradle.properties
           chmod +x gradlew
-          ok=0
-          for i in 1 2 3; do
-            if ./gradlew :app:assembleDebug --stacktrace > build.log 2>&1; then ok=1; break; fi
-            echo "=== attempt $i failed ==="
-            grep -E "error:|What went wrong|Could not" -A2 build.log | head -n 40
-            sleep 15
-          done
-          tail -n 15 build.log
-          [ "$ok" = 1 ]
+          set +e
+          ./gradlew :app:assembleDebug --stacktrace --continue > build.log 2>&1
+          code=$?
+          echo "======== SUMMARY (exit $code) ========"
+          grep -E "Execution failed for task|error:|What went wrong|Could not" -A3 build.log | head -n 50 | tee summary.txt
+          { echo "### exit code $code"; echo '```'; cat summary.txt; echo '```'; } >> $GITHUB_STEP_SUMMARY
+          exit $code
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: apk
           path: work/**/app/build/outputs/apk/debug/*.apk
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-log
+          path: work/**/build.log
