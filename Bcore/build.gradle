@@ -54,7 +54,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
     implementation 'androidx.appcompat:appcompat:1.7.0'
 
-    implementation 'com.github.weishu:FreeReflection:3.0.1'
+    implementation 'com.github.weishu:FreeReflection:3.0.0'
     implementation "com.github.CodingGay.BlackReflection:core:$rootProject.ext.blackReflection"
     implementation project(':Bcore:black-fake')
     implementation project(':Bcore:black-hook')
