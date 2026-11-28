@@ -12,6 +12,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      - name: Install CMake 3.22.1
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "cmake;3.22.1"
+          ls $ANDROID_HOME/cmake
       - run: chmod +x gradlew
       - run: ./gradlew assembleRelease
       - uses: actions/upload-artifact@v4
