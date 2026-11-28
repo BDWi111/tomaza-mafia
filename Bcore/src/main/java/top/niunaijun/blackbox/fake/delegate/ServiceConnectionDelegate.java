@@ -12,14 +12,6 @@ import java.util.Map;
 import black.android.app.BRIServiceConnectionO;
 import top.niunaijun.blackbox.utils.compat.BuildCompat;
 
-/**
- * Created by Milk on 4/2/21.
- * * ∧＿∧
- * (`･ω･∥
- * 丶　つ０
- * しーＪ
- * 此处无Bug
- */
 public class ServiceConnectionDelegate extends IServiceConnection.Stub {
     private static final Map<IBinder, ServiceConnectionDelegate> sServiceConnectDelegate = new HashMap<>();
     private final IServiceConnection mConn;
@@ -56,15 +48,11 @@ public class ServiceConnectionDelegate extends IServiceConnection.Stub {
     }
 
     @Override
-    public void connected(ComponentName name, IBinder service) throws RemoteException {
-        connected(name, service, false);
-    }
-
     public void connected(ComponentName name, IBinder service, boolean dead) throws RemoteException {
         if (BuildCompat.isOreo()) {
             BRIServiceConnectionO.get(mConn).connected(mComponentName, service, dead);
         } else {
-            mConn.connected(name, service);
+            mConn.connected(name, service, dead);
         }
     }
 }
