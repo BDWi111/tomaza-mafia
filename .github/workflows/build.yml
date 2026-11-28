@@ -12,11 +12,17 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Install CMake 3.22.1
+      - name: Install CMake
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "cmake;3.22.1"
-          ls $ANDROID_HOME/cmake
+      - name: Fix local.properties
+        run: |
+          rm -f local.properties
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          sed -i '/cmake.dir/d' gradle.properties || true
+          cat local.properties
+          cat gradle.properties
       - run: chmod +x gradlew
       - run: ./gradlew assembleRelease
       - uses: actions/upload-artifact@v4
